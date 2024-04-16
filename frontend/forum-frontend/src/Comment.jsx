@@ -9,7 +9,7 @@ function Comment(props) {
         <span className='text-xl'>{props.createdBy}</span>
         </div>
         {props.text}
-           
+
     </div>
   )
 }

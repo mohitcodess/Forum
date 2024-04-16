@@ -9,7 +9,8 @@ app.use(express.json());
 app.use(cors());
 
 
-const URI="mongodb+srv://mandloipankaj86:veerhanuman@cluster0.fa9uauv.mongodb.net/BlogApp?retryWrites=true&w=majority"
+const URI = "" // paste your uri
+//connect to the database
 const connectDatabase= async ()=>{
     try{
         await mongoose.connect(URI);
@@ -18,7 +19,12 @@ const connectDatabase= async ()=>{
         console.log(err);
     }
 }
-connectDatabase();
+connectDatabase(); //function call for connecting database
+
+
+//api for signing up for new user 
+//params required username , password , name
+
 app.post('/signup',async (req,res)=>{
     if(!req.body.username){
         res.status(400).send({message:'Username required!'})
@@ -47,6 +53,12 @@ app.post('/signup',async (req,res)=>{
 
     res.status(200).send({message:'Account created Succesfully'});
 })
+
+
+
+
+
+//api for creating a new post 
 app.post('/create-post',async (req,res)=>{
     if(!req.body.text){
         res.status(400).send({});
@@ -65,13 +77,16 @@ app.post('/create-post',async (req,res)=>{
     const newPostInstance = new Post({
         text:req.body.text,
         createdBy:req.body.createdBy,
-        createdAt:'xyz'   
+        createdAt: new Date()
     });
     newPostInstance.save();
     res.status(200).send({message:'Post Created Successfully'});
     
 
 })
+
+
+// api for logging in 
 app.post('/login',async (req,res)=>{
     if(!req.body.username){
         res.status(400).send({message:'Username required!'});
@@ -93,6 +108,9 @@ app.post('/login',async (req,res)=>{
     
 })
 
+
+
+//api gor fetching all the posts 
 app.get('/posts',async (req,res)=>{
     try{
         const posts = await Post.find({}).exec();
@@ -102,6 +120,9 @@ app.get('/posts',async (req,res)=>{
         return;
     }
 })
+
+
+//api for fetching post of a particular id
 app.get('/posts/:id',async (req,res)=>{
     try{
         const post = await Post.findOne({_id:req.params.id}).exec();
